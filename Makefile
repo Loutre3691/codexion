@@ -1,6 +1,8 @@
 NAME = codexion
 
 SRC = main.c \
+	parsing.c \
+	utils.c \
 	pthread_create.c \
 	pthread_join \
 	pthread_mutex_init \
