@@ -8,6 +8,7 @@
 # include <pthread.h>
 # include <stdbool.h>
 # include <sys/time.h>
+# include <limits.h>
 
 // creation d'un enum  pour le schuelder avec fifo et edf pour
 // le  8eme argument, enum valeur = int donc FIFO == 0
@@ -15,7 +16,7 @@
 typedef enum e_sched
 {
     FIFO,
-    EDF
+    EDF,
 }   t_sched;
 
 long long ft_parsing(char *str);
@@ -45,6 +46,20 @@ typedef struct s_coder
     long long    last_compil; // burnout/EDF
     int          nb_compil; // compteur de compilations
 } t_coder;
+
+
+typedef struct s_data
+{
+    long long   number_of_coders;
+    long long   time_to_burnout;
+    long long   time_to_compile;
+    long long   time_to_debug;
+    long long   time_to_refactor;
+    long long   number_of_compile_required;
+    long long   dongle_cooldown;
+    t_sched     scheduler;
+
+} t_data;
 
 
 

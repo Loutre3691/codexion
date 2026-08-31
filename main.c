@@ -3,8 +3,8 @@
 int main(int argc, char **argv)
 {
     int arg = 1;
-    long long result = 0;
-    int scheduler = 0;
+
+    t_data simulator;
 
 
     if (argc != 9)
@@ -15,17 +15,27 @@ int main(int argc, char **argv)
 
     while (arg < argc)
     {
-        if (arg == argc - 1)
-        {
-            scheduler = ft_parsing_scheduler(argv[arg]);
-            printf("scheduler = %s\n", scheduler == FIFO ? "fifo" : "edf");
-        }
+        if (arg == 1)
+            simulator.number_of_coders          = ft_parsing(argv[1]);
+        else if (arg == 2)
+            simulator.time_to_burnout           = ft_parsing(argv[2]);
+        else if (arg == 3)
+            simulator.time_to_compile           = ft_parsing(argv[3]);
+        else if (arg == 4)
+            simulator.time_to_debug             = ft_parsing(argv[4]);
+        else if (arg == 5)
+            simulator.time_to_refactor          = ft_parsing(argv[5]);
+        else if (arg == 6)
+            simulator.number_of_compile_required = ft_parsing(argv[6]);
+        else if (arg == 7)
+            simulator.dongle_cooldown           = ft_parsing(argv[7]);
+        else if (arg == 8)
+            simulator.scheduler                 = ft_parsing_scheduler(argv[8]);
 
-        else
-            result = ft_parsing(argv[arg]);
-  
         arg++;
     }
+
+
     return(0);
   
 }

@@ -12,7 +12,7 @@ long long ft_atoi(char *str)
     {
         if (str[i] < '0' || str[i] > '9')
         {
-            printf("%s", "ERROR: the seven first arguments must be a int positif");
+            printf("%s\n", "ERROR: the seven first arguments must be a int positif");
             exit(1);
         }
         else
