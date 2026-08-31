@@ -2,20 +2,29 @@
 # define CODEXION_H
 # include <stdarg.h>
 # include <stdio.h>
+# include <stdlib.h>
 # include <unistd.h>
 # include <string.h>
 # include <pthread.h>
 # include <stdbool.h>
 # include <sys/time.h>
 
+// creation d'un enum  pour le schuelder avec fifo et edf pour
+// le  8eme argument, enum valeur = int donc FIFO == 0
+// EDF == 1
+typedef enum e_sched
+{
+    FIFO,
+    EDF
+}   t_sched;
 
 long long ft_parsing(char *str);
-long long ft_parsing_schuelder(char *str);
+int       ft_parsing_scheduler(char *str);
 long long ft_atoi(char *str);
 
 
 // creation d'une structure pour definir les programmeurs et leur dongles
-// chaque dongles doit etre un pointeur d'uneliste de dongles, car deux programmeurs
+// chaque dongles doit etre un pointeur d'une liste de dongles, car deux programmeurs
 // vont devoir utiliser le meme dongle
 typedef struct s_dongle
 {
