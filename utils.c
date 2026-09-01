@@ -1,23 +1,11 @@
 #include "codexion.h"
 
-long long ft_atoi(char *str)
+
+void *routine_fonction(void *arg)
 {
-    long long result;
-    int i;
+    t_coder *coder;
 
-    result = 0;
-    i = 0;
-
-    while (str[i] != '\0')
-    {
-        if (str[i] < '0' || str[i] > '9')
-        {
-            printf("%s\n", "ERROR: the seven first arguments must be a int positif");
-            exit(1);
-        }
-        else
-            result = result * 10 + (str[i] - '0');
-        i++;
-    }
-    return (result);
+    coder = (t_coder *)arg;
+    printf("%d\n", coder->id);
+    return (NULL);
 }

@@ -69,5 +69,6 @@ long long ft_parsing(char *str);
 int       ft_parsing_scheduler(char *str);
 long long ft_atoi(char *str);
 void create_coders(t_data *data);
+void *routine_fonction(void *arg);
 
 #endif

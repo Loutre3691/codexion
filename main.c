@@ -2,11 +2,10 @@
 
 int main(int argc, char **argv)
 {
+
     int arg = 1;
 
     t_data data;
-
-    
 
     if (argc != 9)
     {
