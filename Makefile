@@ -3,6 +3,7 @@ NAME = codexion
 SRC = main.c \
 	parsing.c \
 	utils.c \
+	coders.c \
 	pthread_create.c \
 	pthread_join \
 	pthread_mutex_init \
@@ -25,7 +26,6 @@ SRC = main.c \
 	fprintf \
 	strcmp \
 	strlen \
-	atoi \
 	memset
 
 
