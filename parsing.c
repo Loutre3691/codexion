@@ -21,7 +21,7 @@ long long ft_atoi(char *str)
     }
     return (result);
 }
-
+ 
 
 long long ft_parsing(char *str)
 {

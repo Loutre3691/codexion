@@ -1,7 +1,7 @@
 #include "codexion.h"
 
 
-void *routine_fonction(void *arg)
+void *routine_function(void *arg)
 {
     t_coder *coder;
 

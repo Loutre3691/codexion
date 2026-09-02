@@ -35,7 +35,7 @@ int main(int argc, char **argv)
         arg++;
     }
 
-    create_coders(&data);
+    simulator(&data);
 
     return(0);
   
