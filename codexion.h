@@ -70,8 +70,9 @@ int         ft_parsing_scheduler(char *str);
 long long   ft_atoi(char *str);
 void        simulator(t_data *data);
 void        *routine_function(void *arg);
-void        create_coders(t_data *data, int i, t_dongle *dongles, t_coder *coders);
-void        mutex_dongle(t_dongle *dongles, int i);
-
+void        create_coders(t_data *data, t_dongle *dongles, t_coder *coders);
+void        mutex_dongle(t_dongle *dongles, t_data *data);
+void        destroy_dongles(t_data *data, t_dongle *dongles);
+void        join_coders(t_data *data, t_coder *coders);
 
 #endif

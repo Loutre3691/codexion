@@ -5,7 +5,7 @@ SRC = main.c \
 	utils.c \
 	simulator.c \
 	coders.c \
-	dongle.c \
+	dongles.c \
 
 
 OBJ	= $(SRC:%.c=$(OBJ_DIR)/%.o)

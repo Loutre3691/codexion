@@ -4,7 +4,7 @@ void simulator(t_data *data)
 {
     t_coder     *coders;
     t_dongle    *dongles;
-    int         i;
+
 
     // allouer de la memoire pour le nombre de coder et le nombre de dongle crees
     coders = malloc(sizeof(t_coder) * data->number_of_coders);
@@ -20,36 +20,11 @@ void simulator(t_data *data)
     il faut creer un mutex par dongle dans la structure t_dongle, chaque dongles
     est partage entre deux coders
     */
-    i = 0;
-    while(i < data->number_of_coders)
-    {
-        mutex_dongle(dongles, i);
-        create_coders(data, i, dongles, coders);
-        i++;
-    }
-
-    /*
-    La deuxieme boucle permet d' attendre que le coders[i].thread termine s
-    sa fonction et fait son return
-    */
-    i = 0;
-    while(i < data->number_of_coders)
-    {
-        pthread_join(coders[i].thread, NULL);
-        i++;
-    }
-
-    /*
-    Boucle pour detruire les mutex des dongles, il est essentiel de creer 
-    une nouvelle boucle pour ne pas bloquer les dongles des coders voisin
-    qui n'auraient pas finis de travailler
-    */
-    i = 0;
-    while(i < data->number_of_coders)
-    {
-        pthread_mutex_destroy(&dongles[i].mutex);
-        i++;
-    }
+    mutex_dongle(dongles, data);
+    create_coders(data, dongles, coders);
+    join_coders(data, coders);
+    destroy_dongles(data, dongles);
+ 
     
     free(coders);
     free(dongles);
