@@ -3,11 +3,11 @@
 void    create_coders(t_data *data,  t_dongle *dongles, t_coder *coders)
 {
     int i;
-    
+
     i = 0;
     /* 
     boucle sur index i pour creer un thread a chaque id de t_coder
-    le thread est deja cree dans la strcut t_coder pour ca 
+    le thread est deja cree dans la struct t_coder pour ca 
     quon ne le recreeer pas ici
      */
     while(i < data->number_of_coders)
@@ -22,7 +22,6 @@ void    create_coders(t_data *data,  t_dongle *dongles, t_coder *coders)
         pthread_create(&coders[i].thread, NULL, routine_function, &coders[i]);
         i++;
     }
-
 }
 
 /*

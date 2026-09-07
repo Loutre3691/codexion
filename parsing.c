@@ -15,8 +15,13 @@ long long ft_atoi(char *str)
             printf("%s\n", "ERROR: the seven first arguments must be a int positif");
             exit(1);
         }
-        else
-            result = result * 10 + (str[i] - '0');
+        if (result > (LLONG_MAX - (str[i] - '0')) / 10)
+        {
+            // overflow détecté ICI, avant qu'il n'arrive
+            printf("%s %d\n", "ERROR: the seven first arguments must be inf at INT_MAX:", INT_MAX);
+            exit(1);
+        }
+        result = result * 10 + (str[i] - '0');
         i++;
     }
     return (result);

@@ -6,6 +6,7 @@ SRC = main.c \
 	simulator.c \
 	coders.c \
 	dongles.c \
+	scheduler.c \
 
 
 OBJ	= $(SRC:%.c=$(OBJ_DIR)/%.o)

@@ -11,10 +11,10 @@ void    mutex_dongle(t_dongle *dongles, t_data *data)
     while(i < data->number_of_coders)
     {
         pthread_mutex_init(&dongles[i].mutex, NULL);
+        dongles[i].id = i; // pas obligatoire juste pour debug
         i++;
     }
 }
-
 
 /*
 Boucle pour detruire les mutex des dongles, il est essentiel de creer 

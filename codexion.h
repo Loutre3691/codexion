@@ -62,6 +62,14 @@ typedef struct s_coder
     int          nb_compil; // compteur de compilations
 } t_coder;
 
+typedef struct s_monitor
+{
+    bool                stop_routine;
+    pthread_mutex_t     stop_mutex;   // protège stop_routine
+    t_data              *data;     // acces en lecture des arguments
+    t_coder             *coder; // accès en lecture à l'état de chaque coder
+} t_monitor;
+
 
 
 // FONCTIONS
@@ -75,5 +83,8 @@ void        create_coders(t_data *data, t_dongle *dongles, t_coder *coders);
 void        mutex_dongle(t_dongle *dongles, t_data *data);
 void        destroy_dongles(t_data *data, t_dongle *dongles);
 void        join_coders(t_data *data, t_coder *coders);
+void        edf(t_coder *coder);
+void        fifo(t_coder *coder);
+
 
 #endif
