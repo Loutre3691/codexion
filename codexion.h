@@ -67,6 +67,7 @@ typedef struct s_coder
 // FONCTIONS
 long long   ft_parsing(char *str);
 int         ft_parsing_scheduler(char *str);
+long long   ft_parsing_nbr_coders(char *str);
 long long   ft_atoi(char *str);
 void        simulator(t_data *data);
 void        *routine_function(void *arg);

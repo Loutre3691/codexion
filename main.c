@@ -16,7 +16,7 @@ int main(int argc, char **argv)
     while (arg < argc)
     {
         if (arg == 1)
-            data.number_of_coders          = ft_parsing(argv[1]);
+            data.number_of_coders          = ft_parsing_nbr_coders(argv[1]);
         else if (arg == 2)
             data.time_to_burnout           = ft_parsing(argv[2]);
         else if (arg == 3)

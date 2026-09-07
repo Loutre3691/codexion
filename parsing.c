@@ -22,8 +22,21 @@ long long ft_atoi(char *str)
     return (result);
 }
  
-
 long long ft_parsing(char *str)
+{
+    long long new_nbr;
+    new_nbr = ft_atoi(str);
+
+    if (new_nbr > INT_MAX)
+    {
+        printf("%s %d\n", "ERROR: the seven first arguments must be inf at INT_MAX:", INT_MAX);
+        exit(1);
+    }
+
+    return (new_nbr);
+}
+
+long long ft_parsing_nbr_coders(char *str)
 {
     long long new_nbr;
     new_nbr = ft_atoi(str);
