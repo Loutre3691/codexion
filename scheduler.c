@@ -1,12 +1,12 @@
 #include "codexion.h"
 
-void    fifo(t_coder *coder)
+long long    fifo(t_coder *coder)
 {
-    
+    return (coder->id);
 }
 
 
-void   edf(t_coder *coder)
+long long   edf(t_coder *coder)
 {
-
+    return (coder->id);
 }

@@ -19,7 +19,7 @@ void simulator(t_data *data)
     il faut creer un mutex par dongle dans la structure t_dongle, chaque dongles
     est partage entre deux coders
     */
-    mutex_dongle(dongles, data);
+    init_dongle(dongles, data);
     create_coders(data, dongles, coders);
     join_coders(data, coders);
     destroy_dongles(data, dongles);

@@ -3,7 +3,7 @@
 /*
 IL est important d'initialiser tous les mutex (les dongles ici) avant de create_coders
 */
-void    mutex_dongle(t_dongle *dongles, t_data *data)
+void    init_dongle(t_dongle *dongles, t_data *data)
 {
     int i;
 
@@ -12,6 +12,7 @@ void    mutex_dongle(t_dongle *dongles, t_data *data)
     {
         pthread_mutex_init(&dongles[i].mutex, NULL);
         dongles[i].id = i; // pas obligatoire juste pour debug
+        dongles[i].is_used = false;
         i++;
     }
 }

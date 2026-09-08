@@ -29,7 +29,6 @@ typedef struct s_dongle
 /*creation d'un enum  pour le schuelder avec fifo et edf pour
 le  8eme argument, enum valeur = int donc FIFO == 0
 EDF == 1*/
-
 typedef enum e_sched
 {
     FIFO,
@@ -80,11 +79,13 @@ long long   ft_atoi(char *str);
 void        simulator(t_data *data);
 void        *routine_function(void *arg);
 void        create_coders(t_data *data, t_dongle *dongles, t_coder *coders);
-void        mutex_dongle(t_dongle *dongles, t_data *data);
+void        init_dongle(t_dongle *dongles, t_data *data);
 void        destroy_dongles(t_data *data, t_dongle *dongles);
 void        join_coders(t_data *data, t_coder *coders);
-void        edf(t_coder *coder);
-void        fifo(t_coder *coder);
-
+long long   edf(t_coder *coder);
+long long   fifo(t_coder *coder);
+void        dongle_used(t_coder *coder);
+void        ft_compile(t_coder *coder);
+long long   get_time_ms();
 
 #endif

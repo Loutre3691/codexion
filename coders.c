@@ -1,15 +1,15 @@
 #include "codexion.h"
 
-void    create_coders(t_data *data,  t_dongle *dongles, t_coder *coders)
-{
-    int i;
-
-    i = 0;
     /* 
     boucle sur index i pour creer un thread a chaque id de t_coder
     le thread est deja cree dans la struct t_coder pour ca 
     quon ne le recreeer pas ici
      */
+void    create_coders(t_data *data,  t_dongle *dongles, t_coder *coders)
+{
+    int i;
+
+    i = 0;
     while(i < data->number_of_coders)
     {
         coders[i].data = data; // recuperation de la struct data dans coders
@@ -25,10 +25,9 @@ void    create_coders(t_data *data,  t_dongle *dongles, t_coder *coders)
 }
 
 /*
-La deuxieme boucle permet d' attendre que le coders[i].thread termine s
+La deuxieme boucle permet d' attendre que le coders[i].thread termine
 sa fonction et fait son return
 */
-
 void    join_coders(t_data *data, t_coder *coders)
 {
     int i;

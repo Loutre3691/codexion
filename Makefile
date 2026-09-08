@@ -2,10 +2,11 @@ NAME = codexion
 
 SRC = main.c \
 	parsing.c \
-	utils.c \
-	simulator.c \
 	coders.c \
 	dongles.c \
+	simulator.c \
+	routine.c \
+	time.c \
 	scheduler.c \
 
 
