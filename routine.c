@@ -27,14 +27,27 @@ void    dongle_used(t_coder *coder)
 
 void    ft_compile(t_coder *coder)
 {
+    long long time_now;
     long long time_to_compile;
+    long long deadline_burnout;
+    long long last_time; // temps ecoule depuis derniere action
     
-    time_to_compile = get_time_ms();
-    printf("%lld\n", time_to_compile);
-    long long data = coder->data->number_of_coders;
+    time_now = get_time_ms();
+    time_to_compile = coder->data->time_to_compile * 1000;
 
-    printf("%lld\n", data);
 
+    last_time = time_now - coder->last_compil;
+    deadline_burnout = coder->last_compil + (coder->data->time_to_burnout * 1000);
+
+    // recuperation de la structure avec seconde et nano sec de deadline pour la suite
+    struct timespec deadline_s = get_time_s(&deadline_burnout);
+
+    // fonction condition pour attendre un temps defini avec la struct deadline en seconde
+    // 
+    pthread_cond_timedwait(&coder->monitor->stop_cond, &coder->monitor->stop_mutex, &deadline_s);
+
+    time_now = get_time_ms();
+    coder->last_compil = time_now;
 }
 
 
@@ -53,19 +66,3 @@ void    *routine_function(void *arg)
 
     return (NULL);
 }
-
-
-/*
-┌─────────────────────────────────────┐
-│  Boucle tant que pas fini :          │
-│                                       │
-│   1. Acquérir dongle gauche + droit  │ ← ici mutex_lock (attente possible)
-│   2. COMPILER (time_to_compile ms)   │ ← garde les 2 dongles pendant ce temps
-│   3. Libérer les 2 dongles           │ ← mutex_unlock + démarrer cooldown
-│   4. nb_compil++, last_compil = now  │
-│   5. DEBUG (time_to_debug ms)        │ ← pas de dongle
-│   6. REFACTOR (time_to_refactor ms)  │ ← pas de dongle
-│   7. → retour en haut, immédiatement │
-│                                       │
-└─────────────────────────────────────┘
-*/
