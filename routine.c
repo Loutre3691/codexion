@@ -1,28 +1,26 @@
 #include "codexion.h"
 
+/* fonction qui de leur atribuer les dongles selon le modulo de chaque id pour 
+eviter que tous le monde commence avec le dongle de droite
+*/
 void    dongle_used(t_coder *coder)
 {
-    bool right_used;
-    bool left_used;
 
-    t_dongle *right_dongle = coder->right_dongle;
-    t_dongle *left_dongle = coder->left_dongle;
-    right_used = right_dongle->is_used;
-    left_used = left_dongle->is_used;
-
-    while(right_used == false && left_used == false)
+    if (coder->id % 2 == 0)
     {
-        if (right_used == false)
-        {
-            pthread_mutex_lock(&right_dongle->mutex);
-            right_used = true;
-        }
-        if (left_used == false)
-        {
-            pthread_mutex_lock(&left_dongle->mutex);
-            left_used = true;
-        }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+        pthread_mutex_lock(&coder->right_dongle->mutex);
+        coder->right_dongle->is_used = true;
+        pthread_mutex_lock(&coder->left_dongle->mutex);
+        coder->left_dongle->is_used = true;
     }
+    else
+    {
+        pthread_mutex_lock(&coder->left_dongle->mutex);
+        coder->left_dongle->is_used = true;
+        pthread_mutex_lock(&coder->right_dongle->mutex);
+        coder->right_dongle->is_used = true;
+    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
 }
 
 void    ft_compile(t_coder *coder)
@@ -34,19 +32,25 @@ void    ft_compile(t_coder *coder)
     
     time_now = get_time_ms();
     time_to_compile = coder->data->time_to_compile * 1000;
+   
+    pthread_mutex_init(&coder->monitor->stop_mutex, NULL);
 
+    while(coder->monitor->stop_routine == false)
+    {
+        pthread_mutex_lock(&coder->monitor->stop_mutex);
+        last_time = time_now - coder->last_compil;
+        deadline_burnout = coder->last_compil + (coder->data->time_to_burnout * 1000);
 
-    last_time = time_now - coder->last_compil;
-    deadline_burnout = coder->last_compil + (coder->data->time_to_burnout * 1000);
+        // recuperation de la structure avec seconde et nano sec de deadline pour la suite
+        struct timespec deadline_s = get_time_s(&deadline_burnout);
 
-    // recuperation de la structure avec seconde et nano sec de deadline pour la suite
-    struct timespec deadline_s = get_time_s(&deadline_burnout);
+        /*met le thread en pause. Il se réveille: deadline atteinte, soit autre thread appelle 
+        broadcast/signal sur stop_cond. stop_mutex est liberer le temsp de lattente et reverouille
+        apres*/
+        pthread_cond_timedwait(&coder->monitor->stop_cond, &coder->monitor->stop_mutex, &deadline_s);
+    }
 
-    // fonction condition pour attendre un temps defini avec la struct deadline en seconde
-    // 
-    pthread_cond_timedwait(&coder->monitor->stop_cond, &coder->monitor->stop_mutex, &deadline_s);
-
-    time_now = get_time_ms();
+    pthread_mutex_unlock(&coder->monitor->stop_mutex);
     coder->last_compil = time_now;
 }
 

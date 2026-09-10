@@ -65,9 +65,9 @@ typedef struct s_coder
 
 typedef struct s_monitor
 {
-    bool                stop_routine;
-    pthread_mutex_t     stop_mutex;   // protège stop_routine
-    pthread_cond_t      stop_cond; // reveil tous les thread si burnout
+    bool                stop_routine; // LA CONDITION (la vraie donnée, le booléen)
+    pthread_mutex_t     stop_mutex;   // LE VERROU (protège l'accès à stop_routine)
+    pthread_cond_t      stop_cond; // LA SONNETTE (le mécanisme qui réveille les threads)
     t_data              *data;     // acces en lecture des arguments
     t_coder             *coder; // accès en lecture à l'état de chaque coder
 } t_monitor;
@@ -81,7 +81,8 @@ long long           ft_parsing_nbr_coders(char *str);
 long long           ft_atoi(char *str);
 void                simulator(t_data *data);
 void                *routine_function(void *arg);
-void                create_coders(t_data *data, t_dongle *dongles, t_coder *coders);
+void                init_monitor(t_monitor *monitor, t_data *data, t_coder *coders);
+void                create_coders(t_data *data, t_dongle *dongles, t_coder *coders, t_monitor *monitor);
 void                init_dongle(t_dongle *dongles, t_data *data);
 void                destroy_dongles(t_data *data, t_dongle *dongles);
 void                join_coders(t_data *data, t_coder *coders);

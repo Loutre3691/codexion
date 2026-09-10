@@ -5,7 +5,7 @@
     le thread est deja cree dans la struct t_coder pour ca 
     quon ne le recreeer pas ici
      */
-void    create_coders(t_data *data,  t_dongle *dongles, t_coder *coders)
+void    create_coders(t_data *data,  t_dongle *dongles, t_coder *coders, t_monitor *monitor)
 {
     int i;
 
@@ -19,6 +19,7 @@ void    create_coders(t_data *data,  t_dongle *dongles, t_coder *coders)
         coders[i].id = i; // attribution d'un numero a chaque id de coders
         coders[i].nb_compil = 0; // init nb_compil et last_compil a 0
         coders[i].last_compil = 0;
+        coders[i].monitor = monitor;
         pthread_create(&coders[i].thread, NULL, routine_function, &coders[i]);
         i++;
     }
