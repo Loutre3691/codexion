@@ -2,17 +2,14 @@
 
 int main(int argc, char **argv)
 {
-
     int arg = 1;
 
     t_data data;
-
     if (argc != 9)
     {
         printf("%s\n", "You must give 8 arguments");
         exit(1);
     }
-
     while (arg < argc)
     {
         if (arg == 1)
@@ -34,9 +31,6 @@ int main(int argc, char **argv)
 
         arg++;
     }
-
     simulator(&data);
-
     return(0);
-  
 }

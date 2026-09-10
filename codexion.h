@@ -68,6 +68,8 @@ typedef struct s_monitor
     bool                stop_routine; // LA CONDITION (la vraie donnée, le booléen)
     pthread_mutex_t     stop_mutex;   // LE VERROU (protège l'accès à stop_routine)
     pthread_cond_t      stop_cond; // LA SONNETTE (le mécanisme qui réveille les threads)
+    long long           start_time; // time du debut pour le timer au fur et a mesure
+    pthread_mutex_t     print_mutex; // permet de mettre un mutex sur les printf 
     t_data              *data;     // acces en lecture des arguments
     t_coder             *coder; // accès en lecture à l'état de chaque coder
 } t_monitor;
@@ -89,8 +91,13 @@ void                join_coders(t_data *data, t_coder *coders);
 long long           edf(t_coder *coder);
 long long           fifo(t_coder *coder);
 void                dongle_used(t_coder *coder);
+void                left_dongle_used(t_coder *coder);
+void                right_dongle_used(t_coder *coder);
 void                ft_compile(t_coder *coder);
+void                ft_debug(t_coder *coder);
+void                ft_refactoring(t_coder *coder);
 long long           get_time_ms();
 struct timespec     get_time_s(long long *deadline);
+void                free_all(t_coder *coders, t_dongle *dongles, t_monitor *monitor);
 
 #endif

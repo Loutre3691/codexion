@@ -35,3 +35,49 @@ void    destroy_dongles(t_data *data, t_dongle *dongles)
         i++;
     }
 }
+
+void    right_dongle_used(t_coder *coder)
+{
+    long long timer;
+
+    pthread_mutex_lock(&coder->right_dongle->mutex);
+
+    coder->right_dongle->is_used = true;
+    timer = get_time_ms() - coder->monitor->start_time;
+
+    pthread_mutex_lock(&coder->monitor->print_mutex);
+    printf("%lld %d has taken a dongle\n", timer, coder->id);
+    pthread_mutex_unlock(&coder->monitor->print_mutex);
+}
+
+void    left_dongle_used(t_coder *coder)
+{
+    long long timer;
+
+    pthread_mutex_lock(&coder->left_dongle->mutex);
+
+    coder->left_dongle->is_used = true;
+    timer = get_time_ms() - coder->monitor->start_time;
+
+    pthread_mutex_lock(&coder->monitor->print_mutex);
+    printf("%lld %d has taken a dongle\n", timer, coder->id);
+    pthread_mutex_unlock(&coder->monitor->print_mutex);
+}
+
+/* fonction qui de leur atribuer les dongles selon le modulo de chaque id pour 
+eviter que tous le monde commence avec le dongle de droite
+*/
+void    dongle_used(t_coder *coder)
+{
+
+    if (coder->id % 2 == 0)
+    {
+        right_dongle_used(coder);
+        left_dongle_used(coder);
+    }
+    else
+    {
+        left_dongle_used(coder);
+        right_dongle_used(coder);
+    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+}

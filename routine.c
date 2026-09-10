@@ -1,60 +1,40 @@
 #include "codexion.h"
 
-/* fonction qui de leur atribuer les dongles selon le modulo de chaque id pour 
-eviter que tous le monde commence avec le dongle de droite
-*/
-void    dongle_used(t_coder *coder)
-{
 
-    if (coder->id % 2 == 0)
-    {
-        pthread_mutex_lock(&coder->right_dongle->mutex);
-        coder->right_dongle->is_used = true;
-        pthread_mutex_lock(&coder->left_dongle->mutex);
-        coder->left_dongle->is_used = true;
-    }
-    else
-    {
-        pthread_mutex_lock(&coder->left_dongle->mutex);
-        coder->left_dongle->is_used = true;
-        pthread_mutex_lock(&coder->right_dongle->mutex);
-        coder->right_dongle->is_used = true;
-    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-
-}
-
+/* ft_compile prends juste le time_to_compile et fait attendre avec u_sleep, quand cest ecoule
+on unlock le dongle gauche et droit, et mise a jour de last_compil*/
 void    ft_compile(t_coder *coder)
 {
-    long long time_now;
     long long time_to_compile;
-    long long deadline_burnout;
-    long long last_time; // temps ecoule depuis derniere action
+    long long timer; 
     
-    time_now = get_time_ms();
     time_to_compile = coder->data->time_to_compile * 1000;
-   
-    pthread_mutex_init(&coder->monitor->stop_mutex, NULL);
 
-    while(coder->monitor->stop_routine == false)
-    {
-        pthread_mutex_lock(&coder->monitor->stop_mutex);
-        last_time = time_now - coder->last_compil;
-        deadline_burnout = coder->last_compil + (coder->data->time_to_burnout * 1000);
+    timer = get_time_ms() - coder->monitor->start_time;
+    printf("%lld %d is compiling\n", timer, coder->id);
+    usleep(time_to_compile); // met en attente le temps de time_to_compile
+    
+    pthread_mutex_unlock(&coder->right_dongle->mutex);
+    coder->right_dongle->is_used = false;
 
-        // recuperation de la structure avec seconde et nano sec de deadline pour la suite
-        struct timespec deadline_s = get_time_s(&deadline_burnout);
+    pthread_mutex_unlock(&coder->left_dongle->mutex);
+    coder->left_dongle->is_used = false;
+    
 
-        /*met le thread en pause. Il se réveille: deadline atteinte, soit autre thread appelle 
-        broadcast/signal sur stop_cond. stop_mutex est liberer le temsp de lattente et reverouille
-        apres*/
-        pthread_cond_timedwait(&coder->monitor->stop_cond, &coder->monitor->stop_mutex, &deadline_s);
-    }
-
-    pthread_mutex_unlock(&coder->monitor->stop_mutex);
-    coder->last_compil = time_now;
+    coder->last_compil = get_time_ms();
 }
 
+void    ft_debug(t_coder *coder)
+{
+    long long nbr = coder->data->number_of_coders;
+    printf("%lld\n", nbr);
+}
 
+void ft_refactoring(t_coder *coder)
+{
+    long long nbr = coder->data->number_of_coders;
+    printf("%lld\n", nbr);
+}
 /*ctete fonction permettra de compiler, de debuger et de refactoriser*/
 void    *routine_function(void *arg)
 {
@@ -64,9 +44,13 @@ void    *routine_function(void *arg)
     coder = (t_coder *)arg;
     data = coder->data;
 
-    dongle_used(coder);
-    ft_compile(coder);
-
+    while(coder->monitor->stop_routine == false)
+    {
+        dongle_used(coder);
+        ft_compile(coder);
+        ft_debug(coder);  
+        ft_refactoring(coder);
+    }
 
     return (NULL);
 }

@@ -25,18 +25,18 @@ void    create_coders(t_data *data,  t_dongle *dongles, t_coder *coders, t_monit
     }
 }
 
-/*
-La deuxieme boucle permet d' attendre que le coders[i].thread termine
-sa fonction et fait son return
-*/
-void    join_coders(t_data *data, t_coder *coders)
-{
-    int i;
+// /*
+// La deuxieme boucle permet d' attendre que le coders[i].thread termine
+// sa fonction et fait son return
+// */
+// void    join_coders(t_data *data, t_coder *coders)
+// {
+//     int i;
 
-    i = 0;
-    while(i < data->number_of_coders)
-    {
-        pthread_join(coders[i].thread, NULL);
-        i++;
-    }
-}
+//     i = 0;
+//     while(i < data->number_of_coders)
+//     {
+//         pthread_join(coders[i].thread, NULL);
+//         i++;
+//     }
+// }

@@ -118,7 +118,7 @@ timestamp = horodatage
 201 1 is debugging
 401 1 is refactoring
 402 2 has taken a dongle
-403 2 has taken a dongle
+403 2 has taken a dongl
 403 2 is compiling
 603 2 is debugging
 803 2 is refactoring
