@@ -100,7 +100,7 @@ void                ft_debug(t_coder *coder);
 void                ft_refactoring(t_coder *coder);
 long long           get_time_ms();
 struct timespec     get_time_s(long long *deadline);
-void                *monitor_routine(t_coder *coder);
+void                *monitor_routine(void *arg);
 void                free_all(t_coder *coders, t_dongle *dongles, t_monitor *monitor);
 
 #endif
