@@ -1,22 +1,20 @@
-FAIT
+Ce qui a bougé depuis le dernier check
+✅ Logs implémentés (dongles pris, compile) — même si format à corriger (takken→taken, retirer left/right)
+✅ print_mutex/log_mutex en place, bien utilisé
+✅ free_all prévu dans le header (à vérifier si codé)
+✅ Relâchement des dongles + is_used = false après compile — fait
+🔶 monitor_routine — un brouillon existe, mais l'architecture n'est pas encore la bonne (pas de vraie boucle sur tous les coders, pas de broadcast réel)
+❌ ft_debug/ft_refactoring — pas encore faits (mais toi t'estimes 1h, ok)
+Rappel de la liste complète
 
-Parsing arguments (ft_parsing, ft_parsing_nbr_coders, ft_parsing_scheduler, overflow)
-Structures (t_coder, t_dongle, t_data, t_monitor)
-Init/destroy mutex + cond (dongles + monitor)
-Attribution dongles voisins (modulo, cercle)
-Création + join threads
-Acquisition 2 dongles sans deadlock (pair/impair, is_used mis à jour)
-free(monitor) + nettoyage mémoire + README
-Relâcher dongles après compile (is_used = false, unlock mutex)
+Fait/quasi fait : parsing, structures, init/destroy mutex+cond, attribution dongles, threads+join, anti-deadlock, logs (à peaufiner), relâchement dongles
 
+Reste à faire :
 
-À FAIRE
-7. Logging avec timestamp + mutex d'affichage
-9. Cooldown dongles (dongle->last_used)
-10. Cycle compile → debug → refactor → recompile (boucle infinie)
-11. Compteur nb_compil + arrêt sur number_of_compiles_required
-12. Thread de monitoring dédié (détection burnout réelle, broadcast)
-13. Scheduler FIFO/EDF + tas maison
-14. Cas 1 seul coder
-15. readme
-16. nettoyage memoire
+ft_debug/ft_refactoring (1h annoncée)
+Cooldown des dongles (dongle_cooldown, last_used) — pas touché
+Compteur nb_compil + arrêt sur number_of_compiles_required — pas touché
+Thread de monitoring réel et fonctionnel (broadcast, boucle sur tous les coders) — brouillon seulement
+Scheduler FIFO/EDF + tas maison — stubs vides
+Cas 1 seul coder — pas géré
+Nettoyage mémoire complet + README

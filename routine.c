@@ -44,6 +44,8 @@ void    *routine_function(void *arg)
     coder = (t_coder *)arg;
     data = coder->data;
 
+
+
     while(coder->monitor->stop_routine == false)
     {
         dongle_used(coder);

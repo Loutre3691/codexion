@@ -5,7 +5,7 @@
     le thread est deja cree dans la struct t_coder pour ca 
     quon ne le recreeer pas ici
      */
-void    create_coders(t_data *data,  t_dongle *dongles, t_coder *coders, t_monitor *monitor)
+void    init_t_coders(t_data *data,  t_dongle *dongles, t_coder *coders, t_monitor *monitor)
 {
     int i;
 
@@ -20,23 +20,7 @@ void    create_coders(t_data *data,  t_dongle *dongles, t_coder *coders, t_monit
         coders[i].nb_compil = 0; // init nb_compil et last_compil a 0
         coders[i].last_compil = 0;
         coders[i].monitor = monitor;
-        pthread_create(&coders[i].thread, NULL, routine_function, &coders[i]);
         i++;
     }
 }
 
-// /*
-// La deuxieme boucle permet d' attendre que le coders[i].thread termine
-// sa fonction et fait son return
-// */
-// void    join_coders(t_data *data, t_coder *coders)
-// {
-//     int i;
-
-//     i = 0;
-//     while(i < data->number_of_coders)
-//     {
-//         pthread_join(coders[i].thread, NULL);
-//         i++;
-//     }
-// }

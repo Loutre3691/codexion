@@ -3,7 +3,7 @@
 /*
 IL est important d'initialiser tous les mutex et les cond (les dongles ici) avant de create_coders
 */
-void    init_dongle(t_dongle *dongles, t_data *data)
+void    init_t_dongle(t_dongle *dongles, t_data *data)
 {
     int i;
 
