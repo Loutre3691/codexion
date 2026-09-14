@@ -18,7 +18,7 @@ void    init_t_coders(t_data *data,  t_dongle *dongles, t_coder *coders, t_monit
         // creation pour chaque id de coder le dongle de gauche, le modulo permet que le dernier est relie au 1er
         coders[i].id = i; // attribution d'un numero a chaque id de coders
         coders[i].nb_compil = 0; // init nb_compil et last_compil a 0
-        coders[i].last_compil = 0;
+        coders[i].last_compil = monitor->start_time;
         coders[i].monitor = monitor;
         i++;
     }

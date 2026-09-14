@@ -68,7 +68,7 @@ typedef struct s_monitor
     bool                stop_routine; // LA CONDITION (la vraie donnée, le booléen)
     long long           start_time; // time du debut pour le timer au fur et a mesure
     long long           deadline_burnout; // le temps ou ca burnout
-    pthread_t           thread_monitor;
+    pthread_t           thread;
     pthread_mutex_t     stop_mutex;   // LE VERROU (protège l'accès à stop_routine)
     pthread_cond_t      stop_cond; // LA SONNETTE (le mécanisme qui réveille les threads)
     pthread_mutex_t     print_mutex; // permet de mettre un mutex sur les printf 
@@ -79,6 +79,7 @@ typedef struct s_monitor
 
 
 // FONCTIONS
+void                sort_parsing(int arg, int argc, char **argv, t_data *data);
 long long           ft_parsing(char *str);
 int                 ft_parsing_scheduler(char *str);
 long long           ft_parsing_nbr_coders(char *str);
@@ -101,6 +102,6 @@ void                ft_refactoring(t_coder *coder);
 long long           get_time_ms();
 struct timespec     get_time_s(long long *deadline);
 void                *monitor_routine(void *arg);
-void                free_all(t_coder *coders, t_dongle *dongles, t_monitor *monitor);
+void                free_all(t_coder *coders, t_dongle *dongles, t_monitor *monitor, t_data * data);
 
 #endif

@@ -14,26 +14,29 @@ void    init_t_monitor(t_monitor *monitor, t_data *data, t_coder *coders)
 }
 
 /* Fonction permettant de gerer le burnout*/
+
 void    *monitor_routine(void *arg)
 {
-    t_coder *coder;
-    coder = (t_coder *)arg;
+    t_monitor *monitor;
+    monitor = (t_monitor *)arg;
     
-    long long time_now;
-    long long deadline_burnout;
-    long long last_time; // temps ecoule depuis derniere action
-    
-    time_now = get_time_ms();
+    while (monitor->stop_routine == false)
+    {
+        int i = 0;
+        while(i < monitor->data->number_of_coders)
+        {
+            monitor->deadline_burnout = monitor->coder[i].last_compil + (monitor->data->time_to_burnout * 1000);
+            if(get_time_ms() >= monitor->deadline_burnout)
+            {
+                pthread_mutex_lock(&monitor->print_mutex);
+                printf("%lld %d is burnout\n", get_time_ms() - monitor->start_time, i);
+                pthread_mutex_unlock(&monitor->print_mutex);
 
-    coder->monitor->deadline_burnout = coder->last_compil + (coder->data->time_to_burnout * 1000);
-    pthread_mutex_lock(&coder->monitor->stop_mutex);
-    last_time = time_now - coder->last_compil;
-    deadline_burnout = coder->last_compil + (coder->data->time_to_burnout * 1000);
-    // recuperation de la structure avec seconde et nano sec de deadline pour la suite
-    struct timespec deadline_s = get_time_s(&deadline_burnout);
-    /*met le thread en pause. Il se réveille: deadline atteinte, soit autre thread appelle 
-    broadcast/signal sur stop_cond. stop_mutex est liberer le temsp de lattente et reverouille
-    apres*/
-    pthread_cond_timedwait(&coder->monitor->stop_cond, &coder->monitor->stop_mutex, &deadline_s);
+                monitor->stop_routine = true;
+            }
+            i++;
+        }
+        usleep(1000); // pause pour laisser un temps off de 0,1 secondes
+    }
     return (NULL);
 }

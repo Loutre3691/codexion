@@ -1,20 +1,22 @@
-Ce qui a bougé depuis le dernier check
-✅ Logs implémentés (dongles pris, compile) — même si format à corriger (takken→taken, retirer left/right)
-✅ print_mutex/log_mutex en place, bien utilisé
-✅ free_all prévu dans le header (à vérifier si codé)
-✅ Relâchement des dongles + is_used = false après compile — fait
-🔶 monitor_routine — un brouillon existe, mais l'architecture n'est pas encore la bonne (pas de vraie boucle sur tous les coders, pas de broadcast réel)
-❌ ft_debug/ft_refactoring — pas encore faits (mais toi t'estimes 1h, ok)
-Rappel de la liste complète
+## Ce qui est solide et fonctionnel (~65-70%)
+Parsing, structures, mutex/cond ✅
+Threads coders + monitor, création et join propre ✅
+Logique dongles (attribution, anti-deadlock, relâchement) ✅
+Logs compile/debug/refactor/burnout, cohérents ✅
+Détection du burnout fonctionnelle et testée ✅
 
-Fait/quasi fait : parsing, structures, init/destroy mutex+cond, attribution dongles, threads+join, anti-deadlock, logs (à peaufiner), relâchement dongles
 
-Reste à faire :
+## Ce qu'il reste (~30-35%)
+Scheduler FIFO/EDF 
 
-ft_debug/ft_refactoring (1h annoncée)
-Cooldown des dongles (dongle_cooldown, last_used) — pas touché
-Compteur nb_compil + arrêt sur number_of_compiles_required — pas touché
-Thread de monitoring réel et fonctionnel (broadcast, boucle sur tous les coders) — brouillon seulement
-Scheduler FIFO/EDF + tas maison — stubs vides
-Cas 1 seul coder — pas géré
-Nettoyage mémoire complet + README
+Cooldown des dongles — petit, mais à ne pas oublier
+
+Compteur nb_compil + condition d'arrêt "succès" — actuellement ton programme ne s'arrête que sur burnout, jamais sur "tout le monde a fini de compiler le nombre requis de fois"
+
+Race condition sur last_compil — rapide à corriger (un mutex), mais à ne pas zapper pour la soutenance/l'éval
+
+Cas 1 seul coder — souvent un edge case surveillé de près 
+
+Nettoyage mémoire (valgrind/helgrind) — peut prendre du temps si des fuites ou races surgissent
+
+README
