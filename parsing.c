@@ -89,10 +89,11 @@ void    sort_parsing(int arg, int argc, char **argv, t_data *data)
         else if (arg == 6)
             data->number_of_compile_required = ft_parsing(argv[6]);
         else if (arg == 7)
-            data->dongle_cooldown           = ft_parsing(argv[7]);
+            data->cooldown           = ft_parsing(argv[7]);
         else if (arg == 8)
             data->scheduler                 = ft_parsing_scheduler(argv[8]);
 
         arg++;
     }
 }
+

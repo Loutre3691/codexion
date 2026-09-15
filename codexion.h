@@ -45,7 +45,7 @@ typedef struct s_data
     long long   time_to_debug;
     long long   time_to_refactor;
     long long   number_of_compile_required;
-    long long   dongle_cooldown;
+    long long   cooldown;
     t_sched     scheduler;
 
 } t_data;

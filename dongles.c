@@ -14,6 +14,7 @@ void    init_t_dongle(t_dongle *dongles, t_data *data)
         pthread_cond_init(&dongles[i].cond, NULL);
         dongles[i].id = i; // pas obligatoire juste pour debug
         dongles[i].is_used = false;
+        dongles[i].last_used = get_time_ms();
         i++;
     }
 }
@@ -38,9 +39,18 @@ void    destroy_dongles(t_data *data, t_dongle *dongles)
 
 void    right_dongle_used(t_coder *coder)
 {
-    long long timer;
+    long long       timer;
+    long long       cooldown;
+    long long       deadline;
+    struct timespec deadline_ts;
+
+    cooldown = coder->data->cooldown * 1000;
+    deadline = coder->right_dongle->last_used + cooldown;
+    deadline_ts = get_time_s(&deadline);
 
     pthread_mutex_lock(&coder->right_dongle->mutex);
+    while(get_time_ms() < deadline)
+        pthread_cond_timedwait(&coder->right_dongle->cond, &coder->right_dongle->mutex, &deadline_ts);
 
     coder->right_dongle->is_used = true;
     timer = get_time_ms() - coder->monitor->start_time;
@@ -52,9 +62,19 @@ void    right_dongle_used(t_coder *coder)
 
 void    left_dongle_used(t_coder *coder)
 {
-    long long timer;
+    long long       timer;
+    long long       cooldown;
+    long long       deadline;
+    struct timespec deadline_ts;
+
+    cooldown = coder->data->cooldown * 1000;
+    deadline = coder->left_dongle->last_used + cooldown;
+    deadline_ts = get_time_s(&deadline);
 
     pthread_mutex_lock(&coder->left_dongle->mutex);
+
+    while(get_time_ms() < deadline)
+        pthread_cond_timedwait(&coder->left_dongle->cond, &coder->left_dongle->mutex, &deadline_ts);
 
     coder->left_dongle->is_used = true;
     timer = get_time_ms() - coder->monitor->start_time;
@@ -69,7 +89,6 @@ eviter que tous le monde commence avec le dongle de droite
 */
 void    dongle_used(t_coder *coder)
 {
-
     if (coder->id % 2 == 0)
     {
         right_dongle_used(coder);

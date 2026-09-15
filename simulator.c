@@ -8,7 +8,6 @@ void    free_all(t_coder *coders, t_dongle *dongles, t_monitor *monitor, t_data 
     free(data);
 }
 
-
 /* attend que chaque thread ait fini (return) avant de continuer,
 pour ne pas detruire/free de la memoire encore utilisee par un thread actif */
 
@@ -17,7 +16,6 @@ void    join_thread(t_coder *coders, t_data *data)
     int i;
     
     i = 0;
-
     while(i < data->number_of_coders)
     {
         pthread_join(coders[i].thread, NULL);
@@ -55,3 +53,5 @@ void simulator(t_data *data)
     destroy_dongles(data, dongles);
     free_all(coders, dongles, monitor, data);
 }
+
+

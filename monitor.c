@@ -14,7 +14,6 @@ void    init_t_monitor(t_monitor *monitor, t_data *data, t_coder *coders)
 }
 
 /* Fonction permettant de gerer le burnout*/
-
 void    *monitor_routine(void *arg)
 {
     t_monitor *monitor;

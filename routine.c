@@ -18,9 +18,11 @@ void    ft_compile(t_coder *coder)
 
     pthread_mutex_unlock(&coder->right_dongle->mutex);
     coder->right_dongle->is_used = false;
+    coder->right_dongle->last_used = get_time_ms();
 
     pthread_mutex_unlock(&coder->left_dongle->mutex);
     coder->left_dongle->is_used = false;
+    coder->left_dongle->last_used = get_time_ms();
     
     coder->last_compil = get_time_ms();
 }
@@ -41,7 +43,7 @@ void    ft_debug(t_coder *coder)
     
 }
 
-void ft_refactoring(t_coder *coder)
+void    ft_refactoring(t_coder *coder)
 {
     long long time_to_refactor;
     long long timer;
@@ -56,14 +58,13 @@ void ft_refactoring(t_coder *coder)
     usleep(time_to_refactor);
     
 }
+
 /*ctete fonction permettra de compiler, de debuger et de refactoriser*/
 void    *routine_function(void *arg)
 {
     t_coder *coder;
-    t_data *data;
 
     coder = (t_coder *)arg;
-    data = coder->data;
 
     while(coder->monitor->stop_routine == false)
     {
