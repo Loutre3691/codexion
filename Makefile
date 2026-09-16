@@ -2,7 +2,6 @@ NAME = codexion
 
 SRC = main.c \
 	parsing.c \
-	coders.c \
 	monitor.c \
 	dongles.c \
 	simulator.c \

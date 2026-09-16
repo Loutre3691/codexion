@@ -53,14 +53,15 @@ typedef struct s_data
 
 typedef struct s_coder
 {
-    int          id;
-    pthread_t    thread;
-    t_data       *data; // pointeur vers ma struct data
-    t_dongle     *right_dongle;
-    t_dongle     *left_dongle;
-    long long    last_compil; // burnout/EDF
-    int          nb_compil; // compteur de compilations
-    t_monitor    *monitor;
+    int                 id;
+    pthread_t           thread;
+    t_data              *data; // pointeur vers ma struct data
+    t_dongle            *right_dongle;
+    t_dongle            *left_dongle;
+    long long           last_compil; // burnout/EDF
+    int                 nb_compil; // compteur de compilations
+    t_monitor           *monitor;
+    pthread_mutex_t     mutex_last_compil;
 } t_coder;
 
 typedef struct s_monitor
@@ -86,11 +87,11 @@ long long           ft_parsing_nbr_coders(char *str);
 long long           ft_atoi(char *str);
 void                simulator(t_data *data);
 void                *routine_function(void *arg);
-void                init_t_monitor(t_monitor *monitor, t_data *data, t_coder *coders);
-void                init_t_coders(t_data *data, t_dongle *dongles, t_coder *coders, t_monitor *monitor);
-void                init_t_dongle(t_dongle *dongles, t_data *data);
-void                destroy_dongles(t_data *data, t_dongle *dongles);
-void                join_coders(t_data *data, t_coder *coders);
+void                init_t_monitor(t_monitor *monitor, t_data *data, t_coder *coder);
+void                init_t_coder(t_data *data, t_dongle *dongle, t_coder *coder, t_monitor *monitor);
+void                init_t_dongle(t_dongle *dongle, t_data *data);
+void                destroy_mutex(t_data *data, t_dongle *dongle, t_coder *coder);
+void                join_coder(t_data *data, t_coder *coder);
 long long           edf(t_coder *coder);
 long long           fifo(t_coder *coder);
 void                dongle_used(t_coder *coder);
@@ -102,6 +103,6 @@ void                ft_refactoring(t_coder *coder);
 long long           get_time_ms();
 struct timespec     get_time_s(long long *deadline);
 void                *monitor_routine(void *arg);
-void                free_all(t_coder *coders, t_dongle *dongles, t_monitor *monitor, t_data * data);
-
+void                ft_print_burnout(t_monitor *monitor, int i);
+void                free_all(t_coder *coder, t_dongle *dongle, t_monitor *monitor, t_data * data);
 #endif

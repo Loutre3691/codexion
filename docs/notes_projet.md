@@ -9,9 +9,9 @@ Détection du burnout fonctionnelle et testée ✅
 ## Ce qu'il reste (~30-35%)
 Scheduler FIFO/EDF 
 
-Cooldown des dongles — petit, mais à ne pas oublier
+Cooldown des dongles — petit, mais à ne pas oublier ✅
 
-Compteur nb_compil + condition d'arrêt "succès" — actuellement ton programme ne s'arrête que sur burnout, jamais sur "tout le monde a fini de compiler le nombre requis de fois"
+Compteur nb_compil + condition d'arrêt "succès" — actuellement ton programme ne s'arrête que sur burnout, jamais sur "tout le monde a fini de compiler le nombre requis de fois" ✅
 
 Race condition sur last_compil — rapide à corriger (un mutex), mais à ne pas zapper pour la soutenance/l'éval
 
