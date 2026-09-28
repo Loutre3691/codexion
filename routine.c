@@ -8,13 +8,14 @@ void    ft_compile(t_coder *coder)
     long long timer; 
     
     time_to_compile = coder->data->time_to_compile * 1000;
+    pthread_mutex_lock(&coder->monitor->print_mutex);
     timer = get_time_ms() - coder->monitor->start_time;
     if (coder->monitor->stop_routine == true)
     {
         put_down_dongles(coder);
+        pthread_mutex_unlock(&coder->monitor->print_mutex);
         return;
     }
-    pthread_mutex_lock(&coder->monitor->print_mutex);
     printf("\033[1;38;2;0;250;50m%lld %d is compiling\n\033[00m", timer, coder->id);
     pthread_mutex_unlock(&coder->monitor->print_mutex);
 
@@ -30,17 +31,21 @@ void    ft_compile(t_coder *coder)
     pthread_mutex_unlock(&coder->mutex_last_compil);
 }
 
+
 void    ft_debug(t_coder *coder)
 {
     long long time_to_debug;
     long long timer;
 
     time_to_debug = coder->data->time_to_debug * 1000;
+    pthread_mutex_lock(&coder->monitor->print_mutex);
     timer = get_time_ms() - coder->monitor->start_time;
 
     if (coder->monitor->stop_routine == true)
+    {
+        pthread_mutex_unlock(&coder->monitor->print_mutex);
         return;
-    pthread_mutex_lock(&coder->monitor->print_mutex);
+    }
     printf("\033[1;38;2;200;0;200m%lld %d is debuging\n\033[00m", timer, coder->id);
     pthread_mutex_unlock(&coder->monitor->print_mutex);
 
@@ -53,11 +58,14 @@ void    ft_refactoring(t_coder *coder)
     long long timer;
 
     time_to_refactor = coder->data->time_to_refactor * 1000;
+    pthread_mutex_lock(&coder->monitor->print_mutex);
     timer = get_time_ms() - coder->monitor->start_time;
 
     if (coder->monitor->stop_routine == true)
+    {
+        pthread_mutex_unlock(&coder->monitor->print_mutex);
         return;
-    pthread_mutex_lock(&coder->monitor->print_mutex);
+    }
     printf("\033[1;38;2;0;100;255m%lld %d is refactoring\n\033[00m", timer, coder->id);
     pthread_mutex_unlock(&coder->monitor->print_mutex);
 

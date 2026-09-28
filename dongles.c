@@ -45,14 +45,14 @@ void    right_dongle_used(t_coder *coder)
         pthread_cond_timedwait(&coder->right_dongle->cond, &coder->right_dongle->mutex, &deadline_ts);
 
     coder->right_dongle->is_used = true;
+    pthread_mutex_lock(&coder->monitor->print_mutex);
     timer = get_time_ms() - coder->monitor->start_time;
 
     if (coder->monitor->stop_routine == true)
     {
-        pthread_mutex_unlock(&coder->right_dongle->mutex);
+        pthread_mutex_unlock(&coder->monitor->print_mutex);
         return;
     }
-    pthread_mutex_lock(&coder->monitor->print_mutex);
     printf("\033[1;30m%lld %d has taken a dongle\n\033[00m", timer, coder->id);
     pthread_mutex_unlock(&coder->monitor->print_mutex);
 }
@@ -67,19 +67,20 @@ void    left_dongle_used(t_coder *coder)
     cooldown = coder->data->cooldown;
     deadline = coder->left_dongle->last_used + cooldown;
     deadline_ts = get_time_s(&deadline);
+    
     pthread_mutex_lock(&coder->left_dongle->mutex);
     while(get_time_ms() < deadline)
         pthread_cond_timedwait(&coder->left_dongle->cond, &coder->left_dongle->mutex, &deadline_ts);
 
     coder->left_dongle->is_used = true;
+    pthread_mutex_lock(&coder->monitor->print_mutex);
     timer = get_time_ms() - coder->monitor->start_time;
-
+    
     if (coder->monitor->stop_routine == true)
     {
-        pthread_mutex_unlock(&coder->left_dongle->mutex);
+        pthread_mutex_unlock(&coder->monitor->print_mutex);
         return;
     }
-    pthread_mutex_lock(&coder->monitor->print_mutex);
     printf("\033[1;30m%lld %d has taken a dongle\n\033[00m", timer, coder->id);
     pthread_mutex_unlock(&coder->monitor->print_mutex);
 }
