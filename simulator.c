@@ -10,7 +10,6 @@ void    free_all(t_coder *coders, t_dongle *dongle, t_monitor *monitor, t_data *
 
 /* attend que chaque thread ait fini (return) avant de continuer,
 pour ne pas detruire/free de la memoire encore utilisee par un thread actif */
-
 void    join_thread(t_coder *coders, t_data *data)
 {
     int i;
@@ -24,20 +23,19 @@ void    join_thread(t_coder *coders, t_data *data)
     pthread_join(coders->monitor->thread, NULL);
 }
 
-
 void simulator(t_data *data)
 {
     t_coder     *coder;
     t_dongle    *dongle;
     t_monitor   *monitor;
-    int i;
+    int         i;
 
     i = 0;
     monitor = malloc(sizeof(t_monitor));
     coder = calloc(data->number_of_coders, sizeof(t_coder));
     dongle = calloc(data->number_of_coders, sizeof(t_dongle));
 
-    if(!coder || !dongle)
+    if(!coder || !dongle || !monitor)
         exit(1);
 
     init_t_dongle(dongle, data);

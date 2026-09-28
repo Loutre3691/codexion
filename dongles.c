@@ -1,5 +1,15 @@
 #include "codexion.h"
 
+void    put_down_dongles(t_coder *coder)
+{
+    coder->right_dongle->is_used = false;
+    coder->right_dongle->last_used = get_time_ms();
+    pthread_mutex_unlock(&coder->right_dongle->mutex);
+
+    coder->left_dongle->is_used = false;
+    coder->left_dongle->last_used = get_time_ms();
+    pthread_mutex_unlock(&coder->left_dongle->mutex);
+}
 /*
 Boucle pour detruire les mutex et cond 
 */
@@ -13,7 +23,6 @@ void    destroy_mutex(t_data *data, t_dongle *dongle,t_coder *coder)
         pthread_mutex_destroy(&dongle[i].mutex);
         pthread_cond_destroy(&dongle[i].cond);
         pthread_mutex_destroy(&coder[i].mutex_last_compil);
-        
         i++;
     }
         pthread_cond_destroy(&coder->monitor->stop_cond);
@@ -28,10 +37,9 @@ void    right_dongle_used(t_coder *coder)
     long long       deadline;
     struct timespec deadline_ts;
 
-    cooldown = coder->data->cooldown * 1000;
+    cooldown = coder->data->cooldown;
     deadline = coder->right_dongle->last_used + cooldown;
     deadline_ts = get_time_s(&deadline);
-
     pthread_mutex_lock(&coder->right_dongle->mutex);
     while(get_time_ms() < deadline)
         pthread_cond_timedwait(&coder->right_dongle->cond, &coder->right_dongle->mutex, &deadline_ts);
@@ -39,6 +47,11 @@ void    right_dongle_used(t_coder *coder)
     coder->right_dongle->is_used = true;
     timer = get_time_ms() - coder->monitor->start_time;
 
+    if (coder->monitor->stop_routine == true)
+    {
+        pthread_mutex_unlock(&coder->right_dongle->mutex);
+        return;
+    }
     pthread_mutex_lock(&coder->monitor->print_mutex);
     printf("\033[1;30m%lld %d has taken a dongle\n\033[00m", timer, coder->id);
     pthread_mutex_unlock(&coder->monitor->print_mutex);
@@ -51,18 +64,21 @@ void    left_dongle_used(t_coder *coder)
     long long       deadline;
     struct timespec deadline_ts;
 
-    cooldown = coder->data->cooldown * 1000;
+    cooldown = coder->data->cooldown;
     deadline = coder->left_dongle->last_used + cooldown;
     deadline_ts = get_time_s(&deadline);
-
     pthread_mutex_lock(&coder->left_dongle->mutex);
-
     while(get_time_ms() < deadline)
         pthread_cond_timedwait(&coder->left_dongle->cond, &coder->left_dongle->mutex, &deadline_ts);
 
     coder->left_dongle->is_used = true;
     timer = get_time_ms() - coder->monitor->start_time;
 
+    if (coder->monitor->stop_routine == true)
+    {
+        pthread_mutex_unlock(&coder->left_dongle->mutex);
+        return;
+    }
     pthread_mutex_lock(&coder->monitor->print_mutex);
     printf("\033[1;30m%lld %d has taken a dongle\n\033[00m", timer, coder->id);
     pthread_mutex_unlock(&coder->monitor->print_mutex);

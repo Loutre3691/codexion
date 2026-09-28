@@ -50,7 +50,6 @@ typedef struct s_data
 
 } t_data;
 
-
 typedef struct s_coder
 {
     int                 id;
@@ -70,7 +69,7 @@ typedef struct s_monitor
     long long           start_time; // time du debut pour le timer au fur et a mesure
     long long           deadline_burnout; // le temps ou ca burnout
     pthread_t           thread;
-    pthread_mutex_t     stop_mutex;   // LE VERROU (protège l'accès à stop_routine)
+    pthread_mutex_t     stop_mutex; // LE VERROU (protège l'accès à stop_routine)
     pthread_cond_t      stop_cond; // LA SONNETTE (le mécanisme qui réveille les threads)
     pthread_mutex_t     print_mutex; // permet de mettre un mutex sur les printf 
     t_data              *data;     // acces en lecture des arguments
@@ -103,6 +102,7 @@ void                ft_refactoring(t_coder *coder);
 long long           get_time_ms();
 struct timespec     get_time_s(long long *deadline);
 void                *monitor_routine(void *arg);
-void                ft_print_burnout(t_monitor *monitor, int i);
+bool                ft_print_burnout(t_monitor *monitor, int i);
 void                free_all(t_coder *coder, t_dongle *dongle, t_monitor *monitor, t_data * data);
+void                put_down_dongles(t_coder *coder);
 #endif

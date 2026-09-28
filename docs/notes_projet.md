@@ -1,4 +1,4 @@
-## Ce qui est solide et fonctionnel (~65-70%)
+
 Parsing, structures, mutex/cond ✅
 Threads coders + monitor, création et join propre ✅
 Logique dongles (attribution, anti-deadlock, relâchement) ✅
@@ -6,7 +6,6 @@ Logs compile/debug/refactor/burnout, cohérents ✅
 Détection du burnout fonctionnelle et testée ✅
 
 
-## Ce qu'il reste (~30-35%)
 Scheduler FIFO/EDF 
 
 Cooldown des dongles — petit, mais à ne pas oublier ✅
@@ -15,7 +14,7 @@ Compteur nb_compil + condition d'arrêt "succès" — actuellement ton programme
 
 Race condition sur last_compil — rapide à corriger (un mutex), mais à ne pas zapper pour la soutenance/l'éval
 
-Cas 1 seul coder — souvent un edge case surveillé de près 
+Cas 1 seul coder — souvent un edge case surveillé de près ✅
 
 Nettoyage mémoire (valgrind/helgrind) — peut prendre du temps si des fuites ou races surgissent
 
