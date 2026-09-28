@@ -105,4 +105,5 @@ void                *monitor_routine(void *arg);
 bool                ft_print_burnout(t_monitor *monitor, int i);
 void                free_all(t_coder *coder, t_dongle *dongle, t_monitor *monitor, t_data * data);
 void                put_down_dongles(t_coder *coder);
+bool	            all_coders_done(t_monitor *monitor);
 #endif

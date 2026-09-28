@@ -37,10 +37,11 @@ void    right_dongle_used(t_coder *coder)
     long long       deadline;
     struct timespec deadline_ts;
 
+    pthread_mutex_lock(&coder->right_dongle->mutex);
     cooldown = coder->data->cooldown;
     deadline = coder->right_dongle->last_used + cooldown;
     deadline_ts = get_time_s(&deadline);
-    pthread_mutex_lock(&coder->right_dongle->mutex);
+
     while(get_time_ms() < deadline)
         pthread_cond_timedwait(&coder->right_dongle->cond, &coder->right_dongle->mutex, &deadline_ts);
 
@@ -64,11 +65,11 @@ void    left_dongle_used(t_coder *coder)
     long long       deadline;
     struct timespec deadline_ts;
 
+    pthread_mutex_lock(&coder->left_dongle->mutex);
     cooldown = coder->data->cooldown;
     deadline = coder->left_dongle->last_used + cooldown;
     deadline_ts = get_time_s(&deadline);
     
-    pthread_mutex_lock(&coder->left_dongle->mutex);
     while(get_time_ms() < deadline)
         pthread_cond_timedwait(&coder->left_dongle->cond, &coder->left_dongle->mutex, &deadline_ts);
 
