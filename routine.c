@@ -73,6 +73,7 @@ void    ft_refactoring(t_coder *coder)
     
 }
 
+
 /* cette fonction permettra de compiler, de debuger et de refactoriser */
 void    *routine_function(void *arg)
 {
@@ -88,7 +89,7 @@ void    *routine_function(void *arg)
     }
     while(coder->monitor->stop_routine == false)
     {
-        dongle_used(coder);
+        scheduler_check(coder);
         ft_compile(coder);
         if (coder->monitor->stop_routine == true)
             break;

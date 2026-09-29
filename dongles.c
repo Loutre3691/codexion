@@ -10,25 +10,6 @@ void    put_down_dongles(t_coder *coder)
     coder->left_dongle->last_used = get_time_ms();
     pthread_mutex_unlock(&coder->left_dongle->mutex);
 }
-/*
-Boucle pour detruire les mutex et cond 
-*/
-void    destroy_mutex(t_data *data, t_dongle *dongle,t_coder *coder)
-{    
-    int i;
-
-    i = 0;
-    while(i < data->number_of_coders)
-    {
-        pthread_mutex_destroy(&dongle[i].mutex);
-        pthread_cond_destroy(&dongle[i].cond);
-        pthread_mutex_destroy(&coder[i].mutex_last_compil);
-        i++;
-    }
-        pthread_cond_destroy(&coder->monitor->stop_cond);
-        pthread_mutex_destroy(&coder->monitor->stop_mutex);
-        pthread_mutex_destroy(&coder->monitor->print_mutex);
-}
 
 void    right_dongle_used(t_coder *coder)
 {
@@ -86,12 +67,11 @@ void    left_dongle_used(t_coder *coder)
     pthread_mutex_unlock(&coder->monitor->print_mutex);
 }
 
-/* fonction qui de leur atribuer les dongles selon le modulo de chaque id pour 
-eviter que tous le monde commence avec le dongle de droite
-*/
+/* permet de prendre les dgonles selon le modulo le l id du coder 
+pour eviter que tous le monde commence avec le dongle de droite */
 void    dongle_used(t_coder *coder)
 {
-    if (coder->id % 2 == 0)
+if (coder->id % 2 == 0)
     {
         right_dongle_used(coder);
         left_dongle_used(coder);
@@ -100,5 +80,6 @@ void    dongle_used(t_coder *coder)
     {
         left_dongle_used(coder);
         right_dongle_used(coder);
-    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+    }  
 }
+

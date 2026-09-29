@@ -7,7 +7,9 @@ SRC = main.c \
 	simulator.c \
 	routine.c \
 	time.c \
-	scheduler.c \
+	scheduler_check.c \
+	fifo.c \
+	edf.c \
 
 
 OBJ	= $(SRC:%.c=$(OBJ_DIR)/%.o)

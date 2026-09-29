@@ -87,7 +87,7 @@ void    sort_parsing(int arg, int argc, char **argv, t_data *data)
         else if (arg == 7)
             data->cooldown = ft_parsing(argv[7]);
         else if (arg == 8)
-            data->scheduler = ft_parsing_scheduler(argv[8]);
+            data->scheduler.enum_sched = ft_parsing_scheduler(argv[8]);
         arg++;
     }
 }
