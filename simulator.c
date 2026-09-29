@@ -3,6 +3,7 @@
 void    free_all(t_coder *coders, t_dongle *dongle, t_monitor *monitor, t_data *data)
 {
     free(data->scheduler.list_fifo);
+    free(data->scheduler.list_edf);
     free(coders);
     free(dongle);
     free(monitor);
@@ -56,7 +57,7 @@ void simulator(t_data *data)
     t_monitor   *monitor;
 
     i = 0;
-    ft_malloc_all(data);
+    ft_malloc_data(data);
     coder = data->coder;
     monitor = data->monitor;
     dongle = data->dongle;
@@ -64,6 +65,7 @@ void simulator(t_data *data)
     init_t_dongle(dongle, data);
     init_t_monitor(monitor, data, coder);
     init_t_coder(data, dongle, coder, monitor);
+    init_scheduler(data);
 
     while(i < data->number_of_coders)
     {

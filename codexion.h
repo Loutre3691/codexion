@@ -89,36 +89,59 @@ typedef struct s_monitor
 } t_monitor;
 
 
-// FONCTIONS
+//                               FONCTIONS
+
+// Parsing
 void                sort_parsing(int arg, int argc, char **argv, t_data *data);
 long long           ft_parsing(char *str);
 int                 ft_parsing_scheduler(char *str);
 long long           ft_parsing_nbr_coders(char *str);
 long long           ft_atoi(char *str);
-void                simulator(t_data *data);
-void                *routine_function(void *arg);
+
+// Init
 void                init_t_monitor(t_monitor *monitor, t_data *data, t_coder *coder);
 void                init_t_coder(t_data *data, t_dongle *dongle, t_coder *coder, t_monitor *monitor);
 void                init_t_dongle(t_dongle *dongle, t_data *data);
-void                destroy_mutex(t_data *data, t_dongle *dongle, t_coder *coder);
+void                init_scheduler(t_data *data);
+
+// Begin
+void                simulator(t_data *data);
+void                ft_malloc_data(t_data *data);
 void                join_coder(t_data *data, t_coder *coder);
-void                edf(t_coder *coder);
-void                add_fifo(t_coder *coder);
+
+// Dongle
 void                dongle_used(t_coder *coder);
 void                left_dongle_used(t_coder *coder);
 void                right_dongle_used(t_coder *coder);
+void                put_down_dongles(t_coder *coder);
+
+// Routine
+void                *routine_function(void *arg);
 void                ft_compile(t_coder *coder);
 void                ft_debug(t_coder *coder);
 void                ft_refactoring(t_coder *coder);
+
+// Time
 long long           get_time_ms();
 struct timespec     get_time_s(long long *deadline);
+
+// Monitor
 void                *monitor_routine(void *arg);
 bool                ft_print_burnout(t_monitor *monitor, int i);
-void                free_all(t_coder *coder, t_dongle *dongle, t_monitor *monitor, t_data * data);
-void                put_down_dongles(t_coder *coder);
 bool	            all_coders_done(t_monitor *monitor);
-void                ft_malloc_all(t_data *data);
+
+
+// Scheduler
 void                scheduler_check(t_coder *coder);
+void                add_fifo(t_coder *coder);
 void                remove_first_fifo(t_coder *coder);
 bool                check_fifo(t_coder *coder);
+void                add_edf(t_coder *coder);
+bool                check_edf(t_coder *coder);
+
+
+// Cleaning
+void                free_all(t_coder *coder, t_dongle *dongle, t_monitor *monitor, t_data * data);
+void                destroy_mutex(t_data *data, t_dongle *dongle, t_coder *coder);
+
 #endif

@@ -57,29 +57,32 @@ void    init_t_dongle(t_dongle *dongle, t_data *data)
     }
 }
 
-void    ft_malloc_all(t_data *data)
+void    init_scheduler(t_data *data)
 {
     data->scheduler.compteur = 0;
+    data->scheduler.list_fifo = NULL;
+    data->scheduler.list_edf = NULL;
 
     pthread_mutex_init(&data->scheduler.mutex_compteur, NULL);
-
     if (data->scheduler.enum_sched == FIFO)
     {
         data->scheduler.list_fifo = calloc(data->number_of_coders,sizeof(int));
         if(!data->scheduler.list_fifo)
             exit(1);
     }
-    else if(data->scheduler.enum_sched == EDF)
+    else if (data->scheduler.enum_sched == EDF)
     {
         data->scheduler.list_edf = calloc(data->number_of_coders,sizeof(int));
         if(!data->scheduler.list_edf)
             exit(1);
     }
+}
 
+void    ft_malloc_data(t_data *data)
+{
     data->coder = calloc(data->number_of_coders, sizeof(t_coder));
     data->monitor = malloc(sizeof(t_monitor));
     data->dongle = calloc(data->number_of_coders, sizeof(t_dongle));
-
     if(!data->monitor || !data->dongle || !data->coder)
         exit(1);
 }
