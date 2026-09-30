@@ -50,7 +50,7 @@ typedef struct s_scheduler
     t_sched             enum_sched;
     t_heap              heap;
     long long           ticket_counter;
-    pthread_mutex_t     mutex_compteur;
+    pthread_mutex_t     mutex_counter;
 } t_scheduler;
 
 typedef struct s_data
@@ -140,6 +140,11 @@ bool	            all_coders_done(t_monitor *monitor);
 
 // Scheduler
 void                scheduler(t_coder *coder);
+void                heap_push(t_coder *coder, t_data *data)
+bool                has_priority(t_data *data, int a, int b);
+void                heap_pop(t_coder *coder);
+
+
 
 // Cleaning
 void                free_all(t_coder *coder, t_dongle *dongle, t_monitor *monitor, t_data * data);

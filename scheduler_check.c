@@ -7,10 +7,10 @@ void    scheduler(t_coder *coder)
 //     t_scheduler *s;
 
 //     s = &coder->data->scheduler;
-    heap_push(coder);
-    while(my_turn(coder) == false)
-        usleep(100);
-    dongle_used(coder);
-    heap_pop(coder);
+    heap_push(coder, coder->data);
+    // while(my_turn(coder) == false)
+    //     usleep(100);
+    // dongle_used(coder);
+    // heap_pop(coder);
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 }
