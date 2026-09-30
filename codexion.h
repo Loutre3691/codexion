@@ -37,13 +37,19 @@ typedef enum e_sched
     EDF,
 } t_sched;
 
+/* tas(priotiry queue): le + proritaire est toujours en ids[0]*/
+typedef struct s_heap
+{
+    int     *ids;
+    int     size;
+} t_heap;
+
 /* strcuture cree pour regrouper les list fifo edf et le enum_sched*/
 typedef struct s_scheduler
 {
     t_sched             enum_sched;
-    int *               list_fifo;
-    int *               list_edf;
-    int                 compteur;
+    t_heap              heap;
+    long long           ticket_counter;
     pthread_mutex_t     mutex_compteur;
 } t_scheduler;
 
@@ -73,6 +79,7 @@ typedef struct s_coder
     int                 nb_compil; // compteur de compilations
     t_monitor           *monitor;
     pthread_mutex_t     mutex_last_compil;
+    long long           ticket; // ordre arrive pour fifo
 } t_coder;
 
 typedef struct s_monitor
@@ -132,13 +139,7 @@ bool	            all_coders_done(t_monitor *monitor);
 
 
 // Scheduler
-void                scheduler_check(t_coder *coder);
-void                add_fifo(t_coder *coder);
-void                remove_first_fifo(t_coder *coder);
-bool                check_fifo(t_coder *coder);
-void                add_edf(t_coder *coder);
-bool                check_edf(t_coder *coder);
-
+void                scheduler(t_coder *coder);
 
 // Cleaning
 void                free_all(t_coder *coder, t_dongle *dongle, t_monitor *monitor, t_data * data);

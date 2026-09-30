@@ -35,7 +35,7 @@ void    right_dongle_used(t_coder *coder)
         pthread_mutex_unlock(&coder->monitor->print_mutex);
         return;
     }
-    printf("\033[1;30m%lld %d has taken a dongle\n\033[00m", timer, coder->id);
+    printf("\033[1;30m%lld %d has taken a dongle\n\033[00m", timer, coder->id+1);
     pthread_mutex_unlock(&coder->monitor->print_mutex);
 }
 
@@ -63,7 +63,7 @@ void    left_dongle_used(t_coder *coder)
         pthread_mutex_unlock(&coder->monitor->print_mutex);
         return;
     }
-    printf("\033[1;30m%lld %d has taken a dongle\n\033[00m", timer, coder->id);
+    printf("\033[1;30m%lld %d has taken a dongle\n\033[00m", timer, coder->id+1);
     pthread_mutex_unlock(&coder->monitor->print_mutex);
 }
 

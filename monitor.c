@@ -29,7 +29,7 @@ bool    ft_print_burnout(t_monitor *monitor, int i)
     if (get_time_ms() >= monitor->deadline_burnout)
     {
         pthread_mutex_lock(&monitor->print_mutex);
-        printf("\033[1;38;2;255;0;0m%lld %d burned out\n", get_time_ms() - monitor->start_time, i);
+        printf("\033[1;38;2;255;0;0m%lld %d burned out\n", get_time_ms() - monitor->start_time, i+1);
         monitor->stop_routine = true;
         pthread_mutex_unlock(&monitor->print_mutex);
        

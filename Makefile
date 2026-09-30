@@ -8,8 +8,7 @@ SRC = main.c \
 	routine.c \
 	time.c \
 	scheduler_check.c \
-	fifo.c \
-	edf.c \
+	heap.c \
 
 
 OBJ	= $(SRC:%.c=$(OBJ_DIR)/%.o)

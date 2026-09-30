@@ -1,19 +1,16 @@
 #include "codexion.h"
 
-/* permet de gerer le scheduler  */
-void    scheduler_check(t_coder *coder)
+/* etapes pour entrer dans le tas, attendre d'etre en haut du tas
+prendre les dongles, sortir du tas */
+void    scheduler(t_coder *coder)
 {
-    if (coder->data->scheduler.enum_sched == FIFO)
-    {
-        add_fifo(coder); // ajoute a la liste fifo
-        while(check_fifo(coder) == false)
-            usleep(100);
-        dongle_used(coder); // utilie ses dongles si premier de la liste
-        remove_first_fifo(coder); // se retire de la liste
-    }
-    else
-    {
-        add_edf(coder); //ajoute a la liste edf 
-        check_edf(coder);
-    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+//     t_scheduler *s;
+
+//     s = &coder->data->scheduler;
+    heap_push(coder);
+    while(my_turn(coder) == false)
+        usleep(100);
+    dongle_used(coder);
+    heap_pop(coder);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 }

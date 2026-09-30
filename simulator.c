@@ -2,8 +2,7 @@
 
 void    free_all(t_coder *coders, t_dongle *dongle, t_monitor *monitor, t_data *data)
 {
-    free(data->scheduler.list_fifo);
-    free(data->scheduler.list_edf);
+    free(data->scheduler.heap.ids);
     free(coders);
     free(dongle);
     free(monitor);

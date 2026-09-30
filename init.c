@@ -59,23 +59,13 @@ void    init_t_dongle(t_dongle *dongle, t_data *data)
 
 void    init_scheduler(t_data *data)
 {
-    data->scheduler.compteur = 0;
-    data->scheduler.list_fifo = NULL;
-    data->scheduler.list_edf = NULL;
+    data->scheduler.heap.size = 0;
+    data->scheduler.ticket_counter = 0;
 
     pthread_mutex_init(&data->scheduler.mutex_compteur, NULL);
-    if (data->scheduler.enum_sched == FIFO)
-    {
-        data->scheduler.list_fifo = calloc(data->number_of_coders,sizeof(int));
-        if(!data->scheduler.list_fifo)
-            exit(1);
-    }
-    else if (data->scheduler.enum_sched == EDF)
-    {
-        data->scheduler.list_edf = calloc(data->number_of_coders,sizeof(int));
-        if(!data->scheduler.list_edf)
-            exit(1);
-    }
+    data->scheduler.heap.ids = calloc(data->number_of_coders,sizeof(int));
+    if(!data->scheduler.heap.ids)
+        exit(1);
 }
 
 void    ft_malloc_data(t_data *data)
