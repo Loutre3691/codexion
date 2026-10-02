@@ -16,6 +16,13 @@ typedef struct s_coder t_coder;
 typedef struct s_monitor t_monitor; // déclaration anticipée : "t_monitor existe, promis"
 
 
+/* tas(priotiry queue): le + proritaire est toujours en ids[0]*/
+typedef struct s_heap
+{
+    int     *ids;
+    int     size;
+} t_heap;
+
 /* creation d'une structure pour definir les programmeurs et leur dongles
  chaque dongles doit etre un pointeur d'une liste de dongles, car deux programmeurs
  vont devoir utiliser le meme dongle */
@@ -26,6 +33,7 @@ typedef struct s_dongle
     pthread_mutex_t     mutex; // secu, verrou
     pthread_cond_t      cond; // gestion attente, reveil un thread qui attend
     long long           last_used; // cooldown
+    t_heap              heap;
 } t_dongle;
 
 /* creation d'un enum  pour le schuelder avec fifo et edf pour
@@ -37,18 +45,11 @@ typedef enum e_sched
     EDF,
 } t_sched;
 
-/* tas(priotiry queue): le + proritaire est toujours en ids[0]*/
-typedef struct s_heap
-{
-    int     *ids;
-    int     size;
-} t_heap;
 
 /* strcuture cree pour regrouper les list fifo edf et le enum_sched*/
 typedef struct s_scheduler
 {
     t_sched             enum_sched;
-    t_heap              heap;
     long long           ticket_counter;
     pthread_mutex_t     mutex_counter;
 } t_scheduler;
@@ -140,11 +141,11 @@ bool	            all_coders_done(t_monitor *monitor);
 
 // Scheduler
 void                scheduler(t_coder *coder);
-void                heap_push(t_coder *coder, t_data *data);
+bool                my_turn(t_coder *coder);
+void                heap_push(t_heap *heap, t_data *data, int id);
 bool                has_priority(t_data *data, int a, int b);
-void                heap_pop(t_data *data);
+void                heap_pop(t_heap *heap, t_data *data);
 void                heap_swap(int *a, int *b);
-
 
 
 // Cleaning

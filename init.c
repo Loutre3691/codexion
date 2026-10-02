@@ -50,6 +50,9 @@ void    init_t_dongle(t_dongle *dongle, t_data *data)
     {
         pthread_mutex_init(&dongle[i].mutex, NULL);
         pthread_cond_init(&dongle[i].cond, NULL);
+        dongle[i].heap.ids = calloc(2, sizeof(int));
+        if (!dongle[i].heap.ids)
+            exit(1);
         dongle[i].id = i; // pas obligatoire juste pour debug
         dongle[i].is_used = false;
         dongle[i].last_used = 0;
@@ -57,15 +60,10 @@ void    init_t_dongle(t_dongle *dongle, t_data *data)
     }
 }
 
-void    init_scheduler(t_data *data)
+void	init_scheduler(t_data *data)
 {
-    data->scheduler.heap.size = 0;
-    data->scheduler.ticket_counter = 0;
-
-    pthread_mutex_init(&data->scheduler.mutex_counter, NULL);
-    data->scheduler.heap.ids = calloc(data->number_of_coders,sizeof(int));
-    if(!data->scheduler.heap.ids)
-        exit(1);
+	data->scheduler.ticket_counter = 0;
+	pthread_mutex_init(&data->scheduler.mutex_counter, NULL);
 }
 
 void    ft_malloc_data(t_data *data)

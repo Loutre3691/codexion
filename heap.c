@@ -26,73 +26,70 @@ bool    has_priority(t_data *data, int a, int b)
 
     return result;
 }
-/* ajoute un coder dans le tas (file d'attente du scheduler) :
-1. lui donne un ticket (son ordre d'arrivee, pour FIFO)
-2. le place dans la premiere case libre (ids[size]), puis size++
-3. le fait remonter tant qu'il est plus prioritaire que son parent
+/* range un id dans le tas donne en parametre :
+1. le place dans la premiere case libre (ids[size]), puis size++
+2. le fait remonter tant qu'il est plus prioritaire que son parent
    (parent de i = (i - 1) / 2), en swappant a chaque etage
-4. s'arrete quand il est au sommet (i == 0) ou a sa place (break)
-le tout protege par mutex_counter car plusieurs threads y accedent */
-void    heap_push(t_coder *coder, t_data *data)
+3. s'arrete quand il est au sommet (i == 0) ou a sa place (break)
+le mutex et le ticket sont geres par l'appelant (scheduler) */
+void	heap_push(t_heap *heap, t_data *data, int id)
 {
-    int i;
-    int parent;
+	int	i;
+	int	parent;
 
-    pthread_mutex_lock(&data->scheduler.mutex_counter);
-    i = data->scheduler.heap.size;
-    coder->ticket = data->scheduler.ticket_counter;
-    data->scheduler.ticket_counter++;
-
-    data->scheduler.heap.ids[i] = coder->id;
-    data->scheduler.heap.size++;
-
-    while(i > 0)
-    {
-        parent = (i - 1) / 2;
-        if(has_priority(data, data->scheduler.heap.ids[parent], data->scheduler.heap.ids[i]))
-        {    
-            heap_swap(&data->scheduler.heap.ids[i], &data->scheduler.heap.ids[parent]);
-            i = parent;
-        }
-        else
-            break;
-    }
-    pthread_mutex_unlock(&data->scheduler.mutex_counter);
+	i = heap->size;
+	heap->ids[i] = id;
+	heap->size++;
+	while (i > 0)
+	{
+		parent = (i - 1) / 2;
+		if (has_priority(data, heap->ids[parent], heap->ids[i]))
+		{
+			heap_swap(&heap->ids[i], &heap->ids[parent]);
+			i = parent;
+		}
+		else
+			break;
+	}
 }
 
-/* retire le coder du sommet du tas (celui dont c'est le tour) :
-1. echange le sommet avec le dernier, puis size-- (l'ancien sommet sort)
-2. fait redescendre le nouveau sommet tant qu'il a un enfant :
-   - choisit le meilleur des deux enfants (2i+1 et 2i+2)
-     (le 2e seulement s'il est dans le tas)
-   - si cet enfant est plus prioritaire, swap et on continue avec lui
-   - sinon il est a sa place : break
-le tout protege par mutex_counter */
-void    heap_pop(t_data *data)
+/* fait redescendre le sommet du tas tant qu'il a un enfant :
+- choisit le meilleur des deux enfants (2i+1 et 2i+2)
+  (le 2e seulement s'il est dans le tas)
+- si cet enfant est plus prioritaire, swap et on continue avec lui
+- sinon il est a sa place : break */
+void	heap_down(t_heap *heap, t_data *data)
 {
-    int i;
-    int child1;
-    int child2;
-    int best;
+	int	i;
+	int	child1;
+	int	child2;
+	int	best;
 
-    pthread_mutex_lock(&data->scheduler.mutex_counter);
-    i = 0;
-    heap_swap(&data->scheduler.heap.ids[i], &data->scheduler.heap.ids[data->scheduler.heap.size - 1]);
-    data->scheduler.heap.size--;
-    while ((i * 2) + 1 < data->scheduler.heap.size)
-    {
-        child1 = (i * 2) + 1;
-        child2 = (i * 2) + 2;
-        best = child1;
-        if(child2 < data->scheduler.heap.size && has_priority(data, data->scheduler.heap.ids[child1], data->scheduler.heap.ids[child2]))
-            best = child2;
-        if (has_priority(data, data->scheduler.heap.ids[i], data->scheduler.heap.ids[best]))
-        {
-            heap_swap(&data->scheduler.heap.ids[i], &data->scheduler.heap.ids[best]);
-            i = best;
-        }
-        else
-            break;
-    }
-    pthread_mutex_unlock(&data->scheduler.mutex_counter);
+	i = 0;
+	while ((i * 2) + 1 < heap->size)
+	{
+		child1 = (i * 2) + 1;
+		child2 = (i * 2) + 2;
+		best = child1;
+		if (child2 < heap->size
+			&& has_priority(data, heap->ids[child1], heap->ids[child2]))
+			best = child2;
+		if (has_priority(data, heap->ids[i], heap->ids[best]))
+		{
+			heap_swap(&heap->ids[i], &heap->ids[best]);
+			i = best;
+		}
+		else
+			break;
+	}
+}
+
+/* retire le sommet du tas donne : echange le sommet avec le dernier,
+size--, puis fait redescendre le nouveau sommet a sa place.
+le mutex est gere par l'appelant (scheduler) */
+void	heap_pop(t_heap *heap, t_data *data)
+{
+	heap_swap(&heap->ids[0], &heap->ids[heap->size - 1]);
+	heap->size--;
+	heap_down(heap, data);
 }

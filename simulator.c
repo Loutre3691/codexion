@@ -2,7 +2,15 @@
 
 void    free_all(t_coder *coders, t_dongle *dongle, t_monitor *monitor, t_data *data)
 {
-    free(data->scheduler.heap.ids);
+    int i;
+
+    i = 0;
+
+    while(i < data->number_of_coders)
+    {    
+        free(dongle[i].heap.ids);
+        i++;
+    }
     free(coders);
     free(dongle);
     free(monitor);
