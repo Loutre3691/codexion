@@ -62,7 +62,7 @@ void    init_scheduler(t_data *data)
     data->scheduler.heap.size = 0;
     data->scheduler.ticket_counter = 0;
 
-    pthread_mutex_init(&data->scheduler.mutex_compteur, NULL);
+    pthread_mutex_init(&data->scheduler.mutex_counter, NULL);
     data->scheduler.heap.ids = calloc(data->number_of_coders,sizeof(int));
     if(!data->scheduler.heap.ids)
         exit(1);

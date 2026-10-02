@@ -140,9 +140,10 @@ bool	            all_coders_done(t_monitor *monitor);
 
 // Scheduler
 void                scheduler(t_coder *coder);
-void                heap_push(t_coder *coder, t_data *data)
+void                heap_push(t_coder *coder, t_data *data);
 bool                has_priority(t_data *data, int a, int b);
-void                heap_pop(t_coder *coder);
+void                heap_pop(t_data *data);
+void                heap_swap(int *a, int *b);
 
 
 

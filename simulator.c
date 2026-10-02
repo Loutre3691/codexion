@@ -29,7 +29,7 @@ void    destroy_mutex(t_data *data, t_dongle *dongle,t_coder *coder)
     pthread_cond_destroy(&coder->monitor->stop_cond);
     pthread_mutex_destroy(&coder->monitor->stop_mutex);
     pthread_mutex_destroy(&coder->monitor->print_mutex);
-    pthread_mutex_destroy(&data->scheduler.mutex_compteur);
+    pthread_mutex_destroy(&data->scheduler.mutex_counter);
 
 }
 
