@@ -9,6 +9,7 @@ SRC = main.c \
 	time.c \
 	scheduler_check.c \
 	heap.c \
+	init.c \
 
 
 OBJ	= $(SRC:%.c=$(OBJ_DIR)/%.o)

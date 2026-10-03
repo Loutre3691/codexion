@@ -1,31 +1,54 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heap.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fde-chec <fde-chec@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/03 00:00:00 by fde-chec          #+#    #+#             */
+/*   Updated: 2026/10/03 00:00:00 by fde-chec         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "codexion.h"
 
-void    heap_swap(int *a, int *b)
+void	heap_swap(int *a, int *b)
 {
-    int temp;
+	int	temp;
 
-    temp = *a;
-    *a = *b;
-    *b = temp;
+	temp = *a;
+	*a = *b;
+	*b = temp;
 }
-/* compare deux coder : selon si fifo ->  le premier arrive va en haut du tas
-si edf -> celui avec la deadline la plus courte va en haut
-a = parent b = enfant if comparaison between thise twice*/
-bool    has_priority(t_data *data, int a, int b)
+
+/* renvoie true si b doit passer avant a :
+FIFO -> le plus petit ticket (premier arrive)
+EDF  -> la plus petite deadline (last_compil + time_to_burnout),
+		a deadline egale -> le plus petit ticket (departage) */
+bool	has_priority(t_data *data, int a, int b)
 {
-    bool    result;
+	bool		result;
+	long long	deadline_a;
+	long long	deadline_b;
 
-    result = false;
-    if(data->scheduler.enum_sched == FIFO)
-        return (data->coder[a].ticket > data->coder[b].ticket);
-
-    else if(data->scheduler.enum_sched == EDF)
-    {
-
-    }
-
-    return result;
+	result = false;
+	if (data->scheduler.enum_sched == FIFO)
+		return (data->coder[a].ticket > data->coder[b].ticket);
+	else if (data->scheduler.enum_sched == EDF)
+	{
+		pthread_mutex_lock(&data->coder[a].mutex_last_compil);
+		deadline_a = data->coder[a].last_compil + (data->time_to_burnout);
+		pthread_mutex_unlock(&data->coder[a].mutex_last_compil);
+		pthread_mutex_lock(&data->coder[b].mutex_last_compil);
+		deadline_b = data->coder[b].last_compil + (data->time_to_burnout);
+		pthread_mutex_unlock(&data->coder[b].mutex_last_compil);
+		if (deadline_b == deadline_a)
+			return (data->coder[a].ticket > data->coder[b].ticket);
+		return (deadline_a > deadline_b);
+	}
+	return (result);
 }
+
 /* range un id dans le tas donne en parametre :
 1. le place dans la premiere case libre (ids[size]), puis size++
 2. le fait remonter tant qu'il est plus prioritaire que son parent
@@ -49,7 +72,7 @@ void	heap_push(t_heap *heap, t_data *data, int id)
 			i = parent;
 		}
 		else
-			break;
+			break ;
 	}
 }
 
@@ -80,7 +103,7 @@ void	heap_down(t_heap *heap, t_data *data)
 			i = best;
 		}
 		else
-			break;
+			break ;
 	}
 }
 
